@@ -1,7 +1,7 @@
 let times = 0;
 function loadCounter() {
- let link = atob("aHR0cHM6Ly9hbG9uc29hbGlhZ2EtcGFnZS1jb3VudC5nbGl0Y2gubWUvY291bnRlcj9zaXRlPTxzaXRlPiZrZXk9PGtleT4=").replace(/<site>/g,"alonsoaliaga").replace(/<key>/g,"KEY-A");
- let counter = document.getElementById("alonsohosting");
+ let link = atob("aHR0cHM6Ly9hbG9uc29hbGlhZ2EtcGFnZS1jb3VudC5nbGl0Y2gubWUvY291bnRlcj9zaXRlPTxzaXRlPiZrZXk9PGtleT4=").replace(/<site>/g,"alonsohosting").replace(/<key>/g,"KEY-A");
+ let counter = document.getElementById("counter-amount");
  if(counter) {
    $.ajax({
      url: link,
