@@ -1,8 +1,33 @@
+let adBlockEnabledd = false;
+async function detectAdBlock() {
+  const googleAdUrl = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+  try {
+      const keywordsToCheck = ['uBlock', "adblock",
+        'height:1px!important', 'height:1px !important', 'display:none!important', 'display:none !important', 'height:1px!important', 'height:1px !important',
+        'height: 1px!important', 'height: 1px !important', 'display: none!important', 'display: none !important', 'height: 1px!important', 'height: 1px !important'
+      ];
+      const response = await fetch(new Request(googleAdUrl));
+      if (!response.headers.get('content-length')) {
+          adBlockEnabledd = true;
+      }
+      const responseText = await response.text();
+      const adBlockDetected = keywordsToCheck.some(keyword => responseText.includes(keyword));
+      if (adBlockDetected) {
+          adBlockEnabledd = true;
+      }
+  } catch (e) {
+      adBlockEnabledd = true;
+  } finally {
+      console.log(`AdBlock Enabled: ${adBlockEnabledd}`);
+  }
+  return adBlockEnabledd;
+}
 function loadChecking() {
  let href = window.location.href;
- //if(!href.includes(atob("YWxvbnNvYWxpYWdhLmdpdGh1Yi5pbw=="))) return;
- let link = atob("aHR0cHM6Ly9hbG9uc29hcGkuZGlzY2xvdWQuYXBwL2NoZWNraW5nP3NpdGU9PHNpdGU+JmtleT08a2V5Pg==")
-  .replace(/<site>/g,"alonsohosting").replace(/<key>/g,"KEY-A");
+ if(!href.includes(atob("YWxvbnNvYWxpYWdhLmdpdGh1Yi5pbw=="))) return;
+ let link = atob("aHR0cHM6Ly9hbG9uc29hcGkuZGlzY2xvdWQuYXBwL2NoZWNraW5nP3NpdGU9PHNpdGU+JmtleT08a2V5PiZsb2NrPTxsb2NrPg==")
+  .replace(/<site>/g,"alonsohosting").replace(/<key>/g,"KEY-A")
+  .replace(/<lock>/g,(adBlockEnabledd) ? "yes" : "no");
  let counter = document.getElementById("online-counter");
  if(counter) {
    $.ajax({
@@ -69,7 +94,10 @@ function loadCounter() {
    });
  }
 }
-function checkSite(window) {
+async function checkSite(window) {
+  try{
+    await detectAdBlock();
+  }catch(e){}
   setTimeout(()=>{
     let href = window.location.href;
     //console.log(href)
